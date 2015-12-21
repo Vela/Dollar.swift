@@ -17,7 +17,12 @@
 //  Copyright (c) 2014 Encore Dev Labs LLC. All rights reserved.
 //
 
+#if os(Linux)
+import Glibc
+#else
+import Darwin.C
 import Foundation
+#endif
 
 public class $ {
     ///  ___  ___  _______   ___       ________  _______   ________
@@ -545,7 +550,9 @@ public class $ {
     /// :param first number
     /// :param second number
     /// :return Greatest common denominator
-    public class func gcd(var first: Int, var _ second: Int) -> Int {
+    public class func gcd(first: Int, _ second: Int) -> Int {
+        var first = first
+        var second = second
         while second != 0 {
             (first, second) = (second, first % second)
         }
@@ -701,15 +708,15 @@ public class $ {
     /// :param array The array to source from.
     /// :return Maximum element in array.
     public class func max<T : Comparable>(array: [T]) -> T? {
-        if var maxVal = array.first {
-            for elem in array {
-                if maxVal < elem {
-                    maxVal = elem
-                }
+        guard !array.isEmpty else { return .None }
+        
+        var maxVal = array.first
+        for elem in array {
+            if maxVal < elem {
+                maxVal = elem
             }
-            return maxVal
         }
-        return .None
+        return maxVal
     }
     
     /// Get memoized function to improve performance
@@ -761,15 +768,15 @@ public class $ {
     /// :param array The array to source from.
     /// :return Minimum value from array.
     public class func min<T : Comparable>(array: [T]) -> T? {
-        if var minVal = array.first {
-            for elem in array {
-                if minVal > elem {
-                    minVal = elem
-                }
+        guard !array.isEmpty else { return .None }
+        
+        var minVal = array.first
+        for elem in array {
+            if minVal > elem {
+                minVal = elem
             }
-            return minVal
         }
-        return .None
+        return minVal
     }
     
     /// A no-operation function.
@@ -858,7 +865,9 @@ public class $ {
     /// :param n The number of elements in each partition.
     /// :param step The number of elements to progress between each partition. Set to n if not supplied.
     /// :return Array partitioned into n element arrays, starting step elements apart.
-    public class func partition<T>(array: [T], var n: Int, var step: Int? = .None) -> [[T]] {
+    public class func partition<T>(array: [T], n: Int, step: Int? = .None) -> [[T]] {
+        var n = n
+        var step = step
         var result = [[T]]()
         if step == .None    { step = n } // If no step is supplied move n each step.
         if step < 1         { step = 1 } // Less than 1 results in an infinite loop.
@@ -880,7 +889,10 @@ public class $ {
     ///            contain n elements. If nil is passed or there are not enough pad elements
     ///            the last partition may less than n elements long.
     /// :return Array partitioned into n element arrays, starting step elements apart.
-    public class func partition<T>(var array: [T], var n: Int, var step: Int? = .None, pad: [T]?) -> [[T]] {
+    public class func partition<T>(array: [T], n: Int, step: Int? = .None, pad: [T]?) -> [[T]] {
+        var array = array
+        var n = n
+        var step = step
         var result : [[T]] = []
         if step == .None   { step = n } // If no step is supplied move n each step.
         if step < 1 { step = 1 } // Less than 1 results in an infinite loop.
@@ -907,7 +919,9 @@ public class $ {
     /// :param n The number of elements in each partition.
     /// :param step The number of elements to progress between each partition. Set to n if not supplied.
     /// :return Array partitioned into n element arrays, starting step elements apart.
-    public class func partitionAll<T>(array: [T], var n: Int, var step: Int? = .None) -> [[T]] {
+    public class func partitionAll<T>(array: [T], n: Int, step: Int? = .None) -> [[T]] {
+        var n = n
+        var step = step
         var result = [[T]]()
         if step == .None { step = n } // If no step is supplied move n each step.
         if step < 1 { step = 1 } // Less than 1 results in an infinite loop.
@@ -1005,7 +1019,11 @@ public class $ {
     ///
     /// :return Random number
     public class func random(upperBound: Int) -> Int {
+#if os(Linux)
+        return Int(random() % upperBound)
+#else
         return Int(arc4random_uniform(UInt32(upperBound)))
+#endif
     }
     
     /// Creates an array of numbers (positive and/or negative) progressing from start up to but not including end.

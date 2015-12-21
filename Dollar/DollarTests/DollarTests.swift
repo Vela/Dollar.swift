@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Encore Dev Labs LLC. All rights reserved.
 //
 
+#if os(iOS) && os (OSX)
 import XCTest
 import Dollar
 
@@ -481,3 +482,4 @@ class DollarTests: XCTestCase {
         XCTAssertEqual($.fetch([10, 20, 30, 40, 50], 100, orElse: 100), 100, "Returns 100")
     }
 }
+#endif

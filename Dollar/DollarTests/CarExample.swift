@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Encore Dev Labs LLC. All rights reserved.
 //
 
-import Foundation
-
 class CarExample {
     var name:String?
     var color:String?
